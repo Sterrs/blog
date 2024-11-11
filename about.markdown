@@ -4,15 +4,15 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
+## Who Am I?
 
-You can find the source code for Minima at GitHub:
-[jekyll][jekyll-organization] /
-[minima](https://github.com/jekyll/minima)
+My name is Alastair, I'm from the UK and I'm a mathematics graduate currently working as a data specialist for a management consultancy. Among many interests, I'm an open-source software enthusiast and hobbyist.
 
-You can find the source code for Jekyll at GitHub:
-[jekyll][jekyll-organization] /
-[jekyll](https://github.com/jekyll/jekyll)
+## What to expect from my new blog
 
+My plan is to produce one post each month, but we'll see how realistic that turns out to be.
+Some posts may be in-depth discussions on a particular topic I've been thinking about or a personal project I've been working on. Others may simply include a statement or question that's been on my mind.
 
-[jekyll-organization]: https://github.com/jekyll
+The purpose of the blog is to document various things for my personal record and to share those thoughts with others. In addition, I hope it will encourage me to work towards final outputs when I pursue hobby projects, and help me develop my writing skills.
+
+I hope you'll enjoy following along!
