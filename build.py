@@ -2,19 +2,20 @@ import os
 import re
 import frontmatter
 import markdown
+
 from jinja2 import Environment, FileSystemLoader
 
 def convert_math_expressions(text):
-    # Convert block math: $$ ... $$ to a raw HTML div with display math
+    # Convert block math: $$ ... $$ to a raw HTML div with backslashes for MathJax delimiters.
     text = re.sub(
         r'\$\$(.*?)\$\$', 
         lambda m: '<div class="math display">\\[' + m.group(1).strip() + '\\]</div>', 
         text, flags=re.DOTALL
     )
-    # Convert inline math: $ ... $ to a raw HTML span with inline math
+    # Convert inline math: $ ... $ to a raw HTML span with double backslashes.
     text = re.sub(
         r'(?<!\\)\$(.+?)(?<!\\)\$', 
-        lambda m: '<span class="math inline">\\(' + m.group(1).strip() + '\\)</span>', 
+        lambda m: '<span class="math inline">\\\\(' + m.group(1).strip() + '\\\\)</span>', 
         text
     )
     return text
