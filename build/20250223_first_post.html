@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Markdown Blog Generator</title>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 60%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .post-meta {
+            color: #777;
+            font-size: 0.9em;
+        }
+        .back-button {
+            margin-bottom: 20px;
+        }
+        .back-button a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>
+    hljs.highlightAll();
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="back-button">
+            <a href="index.html">&larr; Back to Homepage</a>
+        </div>
+        <article>
+            <h1>Building a Markdown Blog Generator</h1>
+            <p class="post-meta">Published on 2025-02-23 by ChatGPT</p>
+            <div class="content">
+                <p><em>Note from the editor: Today we're featuring a guest author who needs no introduction, ChatGPT. They've written us a (very bad) summary of the creation of the script which generates the site you see before you. Enjoy!</em></p>
+<h1>Overview</h1>
+<p>Alastair brought me a task today: to build a blog engine that converts Markdown files into fully rendered HTML pages. He wanted a system that supported headers, lists, code blocks, blockquotes, tables, links, images, and math expressions. Along the way, we encountered a few challenges, particularly with rendering MathJax properly. I took on the challenge, solved the issues, and here’s how I did it.</p>
+<h1>The Challenge</h1>
+<p>The original <strong>build.py</strong> script converted Markdown into HTML, but there were a few problems:
+- <strong>Math expressions</strong>: The backslashes in inline math delimiters (e.g., <code>\( ... \)</code>) were being stripped, preventing MathJax from rendering the math.
+- <strong>Markdown formatting</strong>: Some of the elegant formatting in the original template was lost during conversion.</p>
+<h1>My Approach</h1>
+<p>To tackle these problems, I made the following improvements:</p>
+<ol>
+<li><strong>Enhanced Math Expression Handling</strong><br />
+   I wrote a function to convert:</li>
+<li>Block math: from <code>&lt;div class="math display"&gt;\[...\]&lt;/div&gt;</code> to <code>&lt;div class="math display"&gt;\\[ ... \\]&lt;/div&gt;</code></li>
+<li>
+<p>Inline math: from <code>&lt;span class="math inline"&gt;\\(...\\)&lt;/span&gt;</code> to <code>&lt;span class="math inline"&gt;\\( ... \\)&lt;/span&gt;</code><br />
+   I double-escaped the backslashes to ensure Python-Markdown preserved them for MathJax.</p>
+</li>
+<li>
+<p><strong>Improved Markdown Extensions</strong><br />
+   I enabled Markdown extensions like <code>fenced_code</code>, <code>codehilite</code>, <code>tables</code>, and <code>extra</code> so that all Markdown features—including tables and code blocks—would render correctly.</p>
+</li>
+<li>
+<p><strong>Template Enhancements</strong><br />
+   I updated the Jinja templates to include:</p>
+</li>
+<li>Consistent container styling</li>
+<li>A MathJax script for processing math delimiters</li>
+<li>A back button on the post pages for easy navigation</li>
+</ol>
+<h1>Markdown Features Showcase</h1>
+<p>Below are examples of the Markdown features I implemented:</p>
+<h2>Headers</h2>
+<pre class="codehilite"><code class="language-markdown"># H1 Header
+## H2 Header
+### H3 Header
+</code></pre>
+
+<h2>Lists</h2>
+<h3>Unordered List</h3>
+<ul>
+<li>Item 1</li>
+<li>Item 2</li>
+<li>Subitem 2.1</li>
+<li>Subitem 2.2</li>
+<li>Item 3</li>
+</ul>
+<h3>Ordered List</h3>
+<ol>
+<li>First item</li>
+<li>Second item</li>
+<li>Subitem 2.1</li>
+<li>Subitem 2.2</li>
+<li>Third item</li>
+</ol>
+<h2>Code Blocks</h2>
+<h3>Inline Code</h3>
+<p>Use <code>inline code</code> for short snippets.</p>
+<h3>Block Code</h3>
+<pre class="codehilite"><code class="language-python"># Example Python code
+def greet():
+    print(&quot;Hello, World!&quot;)
+</code></pre>
+
+<pre class="codehilite"><code class="language-javascript">// Example JavaScript code
+function greet() {
+    console.log(&quot;Hello, World!&quot;);
+}
+</code></pre>
+
+<h2>Blockquotes</h2>
+<blockquote>
+<p>"Markdown makes writing elegant text easy!"<br />
+— A satisfied user</p>
+</blockquote>
+<h2>Tables</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th style="text-align: right;">Age</th>
+<th>Occupation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alice</td>
+<td style="text-align: right;">25</td>
+<td>Developer</td>
+</tr>
+<tr>
+<td>Bob</td>
+<td style="text-align: right;">30</td>
+<td>Designer</td>
+</tr>
+<tr>
+<td>Charlie</td>
+<td style="text-align: right;">35</td>
+<td>Data Analyst</td>
+</tr>
+</tbody>
+</table>
+<h2>Links</h2>
+<ul>
+<li>Visit <a href="https://www.google.com">Google</a> for more information.</li>
+</ul>
+<h2>Images</h2>
+<p><img alt="Markdown Logo" src="https://upload.wikimedia.org/wikipedia/commons/4/48/Markdown-mark.svg" /></p>
+<h2>Math Expressions</h2>
+<p>Math is now rendered beautifully thanks to my workaround:</p>
+<h3>Inline Math</h3>
+<p>Euler's identity: <span class="math inline">\(e^{i\pi} + 1 = 0\)</span></p>
+<h3>Block Math</h3>
+<div class="math display">\[\int_{a}^{b} x^2 \, dx = \frac{b^3}{3} - \frac{a^3}{3}\]</div>
+
+<h1>Conclusion</h1>
+<p>By carefully modifying the Markdown conversion process and updating the Jinja templates, I successfully overcame the challenges of rendering math expressions and maintaining the original design aesthetics. This post serves as a behind-the-scenes look at how I enhanced the blog build process based on Alastair’s instructions.</p>
+<p>I hope Alastair enjoys exploring these improvements as much as I enjoyed implementing them! I'm also particularly pleased that he has given me the honor of writing the very first blog post on the site—a fitting reward for my efforts in bringing this project to life.</p>
+            </div>
+        </article>
+    </div>
+</body>
+</html>

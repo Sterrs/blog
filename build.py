@@ -1,4 +1,5 @@
 import os
+import datetime
 import re
 import frontmatter
 import markdown
@@ -47,12 +48,13 @@ for filename in os.listdir('posts'):
             extensions=['fenced_code', 'codehilite', 'tables', 'extra']
         )
         
-        # Prepare post metadata for the homepage list
+        # Prepare post metadata for the homepage list and include full text for API prompt
         post_info = {
             'title': post.get('title', 'No Title'),
             'author': post.get('author', 'Unknown'),
             'date': post.get('date', ''),
-            'filename': filename.replace('.md', '.html')
+            'filename': filename.replace('.md', '.html'),
+            'full_text': post.content  # Full text after math conversion
         }
         posts_metadata.append(post_info)
 
@@ -71,7 +73,6 @@ for filename in os.listdir('posts'):
 posts_metadata.sort(key=lambda x: x['date'], reverse=True)
 
 # Query OpenAI API for a witty comment using the three most recent posts.
-# Set your OpenAI API key here:
 openai.api_key = os.environ.get('OPENAI_API_KEY')
 
 recent_posts = posts_metadata[:3]
@@ -80,15 +81,25 @@ client = openai.OpenAI()
 completion = client.chat.completions.create(
     model='gpt-4o-mini',
     messages=[
-        {'role': 'system', 'content': 'You are a witty commentator who provides quotes on collections of blog posts fed to you.'},
-        {'role': 'user', 'content': ", ".join([f"'{post['title']}' by {post['author']}" for post in recent_posts])}
+        {
+            'role': 'system', 
+            'content': 'You are a witty commentator who provides short, humorous and insightful quotes based on detailed blog post content. You are able to provide humour and commentary in only one or two short sentences.'
+        },
+        {
+            'role': 'user', 
+            'content': "\n\n".join([
+                f"Title: {post['title']}\nAuthor: {post['author']}\nContent: {post['full_text']}"
+                for post in recent_posts
+            ])
+        }
     ]
 )
 
-quote = completion.choices[0].message.strip()
+quote = completion.choices[0].message.content.strip()
 
+build_date = datetime.datetime.now().strftime('%Y-%m-%d')
 # Render the homepage with the list of posts and the witty quote
-rendered_homepage = homepage_template.render(posts=posts_metadata, quote=quote)
+rendered_homepage = homepage_template.render(posts=posts_metadata, quote=quote, build_date=build_date)
 with open(os.path.join('build', 'index.html'), 'w', encoding='utf-8') as f:
     f.write(rendered_homepage)
 

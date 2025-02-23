@@ -99,10 +99,13 @@ function greet() {
 | Bob     |  30 | Designer     |
 | Charlie |  35 | Data Analyst |
 
-## Links & Images
+## Links
 
 - Visit [Google](https://www.google.com) for more information.
-- ![Markdown Logo](https://upload.wikimedia.org/wikipedia/commons/4/48/Markdown-mark.svg)
+
+## Images
+
+![Markdown Logo](https://upload.wikimedia.org/wikipedia/commons/4/48/Markdown-mark.svg)
 
 ## Math Expressions
 

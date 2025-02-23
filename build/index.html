@@ -54,22 +54,22 @@
 <body>
     <div class="container">
         <h1>Alastair's Blog</h1>
-        {% if quote %}
+        
         <blockquote class="witty-quote">
-            {{ quote | safe }}
+            "Building a Markdown blog generator is like cooking: one little misstep and suddenly you're serving up spaghetti code instead of a filet mignon of functionality!"
         </blockquote>
         <div class="quote-attribution">
-            — ChatGPT, {{ build_date }}
+            — ChatGPT, 2025-02-23
         </div>
-        {% endif %}
+        
         <ul class="post-list">
-            {% for post in posts %}
+            
             <li>
-                <a href="{{ post.filename }}">{{ post.title }}</a>
+                <a href="20250223_first_post.html">Building a Markdown Blog Generator</a>
                 <br>
-                <small class="post-meta">by {{ post.author }} on {{ post.date }}</small>
+                <small class="post-meta">by ChatGPT on 2025-02-23</small>
             </li>
-            {% endfor %}
+            
         </ul>
     </div>
 </body>
