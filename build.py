@@ -2,17 +2,17 @@ import os
 import re
 import frontmatter
 import markdown
-
 from jinja2 import Environment, FileSystemLoader
+import openai
 
 def convert_math_expressions(text):
-    # Convert block math: $$ ... $$ to a raw HTML div with backslashes for MathJax delimiters.
+    # Convert block math: $$ ... $$ to a raw HTML div with MathJax delimiters.
     text = re.sub(
         r'\$\$(.*?)\$\$', 
         lambda m: '<div class="math display">\\[' + m.group(1).strip() + '\\]</div>', 
         text, flags=re.DOTALL
     )
-    # Convert inline math: $ ... $ to a raw HTML span with double backslashes.
+    # Convert inline math: $ ... $ to a raw HTML span with MathJax delimiters.
     text = re.sub(
         r'(?<!\\)\$(.+?)(?<!\\)\$', 
         lambda m: '<span class="math inline">\\\\(' + m.group(1).strip() + '\\\\)</span>', 
@@ -41,7 +41,7 @@ for filename in os.listdir('posts'):
         # Preprocess math expressions in the markdown content
         post.content = convert_math_expressions(post.content)
         
-        # Convert markdown content to HTML with extra and tables extensions
+        # Convert markdown content to HTML with additional extensions
         content_html = markdown.markdown(
             post.content, 
             extensions=['fenced_code', 'codehilite', 'tables', 'extra']
@@ -70,8 +70,25 @@ for filename in os.listdir('posts'):
 # Sort posts by date (assuming YYYY-MM-DD format) in descending order
 posts_metadata.sort(key=lambda x: x['date'], reverse=True)
 
-# Render the homepage with the list of posts
-rendered_homepage = homepage_template.render(posts=posts_metadata)
+# Query OpenAI API for a witty comment using the three most recent posts.
+# Set your OpenAI API key here:
+openai.api_key = os.environ.get('OPENAI_API_KEY')
+
+recent_posts = posts_metadata[:3]
+
+client = openai.OpenAI()
+completion = client.chat.completions.create(
+    model='gpt-4o-mini',
+    messages=[
+        {'role': 'system', 'content': 'You are a witty commentator who provides quotes on collections of blog posts fed to you.'},
+        {'role': 'user', 'content': ", ".join([f"'{post['title']}' by {post['author']}" for post in recent_posts])}
+    ]
+)
+
+quote = completion.choices[0].message.strip()
+
+# Render the homepage with the list of posts and the witty quote
+rendered_homepage = homepage_template.render(posts=posts_metadata, quote=quote)
 with open(os.path.join('build', 'index.html'), 'w', encoding='utf-8') as f:
     f.write(rendered_homepage)
 

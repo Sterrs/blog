@@ -20,6 +20,11 @@
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+        .witty-quote {
+            font-style: italic;
+            margin-bottom: 20px;
+            color: #555;
+        }
         .post-list {
             list-style: none;
             padding: 0;
@@ -42,6 +47,11 @@
 </head>
 <body>
     <div class="container">
+        {% if quote %}
+        <blockquote class="witty-quote">
+            {{ quote | safe }}
+        </blockquote>
+        {% endif %}
         <h1>My Blog</h1>
         <ul class="post-list">
             {% for post in posts %}
