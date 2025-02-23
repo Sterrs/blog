@@ -1,3 +1,9 @@
+---
+title: "Welcome to My Blog"
+author: "John Doe"
+date: "2025-02-23"
+---
+
 # Welcome to My Blog
 
 ## Introduction
