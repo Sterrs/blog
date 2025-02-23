@@ -5,13 +5,21 @@ import markdown
 from jinja2 import Environment, FileSystemLoader
 
 def convert_math_expressions(text):
-    # Convert block math: $$...$$ to \[ ... \]
-    text = re.sub(r'\$\$(.+?)\$\$', r'\\[\1\\]', text, flags=re.DOTALL)
-    # Convert inline math: $...$ to \( ... \)
-    text = re.sub(r'(?<!\$)\$(.+?)(?<!\$)\$(?!\$)', r'\\(\1\\)', text, flags=re.DOTALL)
+    # Convert block math: $$ ... $$ to \[ ... \]
+    text = re.sub(
+        r'\$\$(.*?)\$\$', 
+        lambda m: '\\[' + m.group(1).strip() + '\\]', 
+        text, flags=re.DOTALL
+    )
+    # Convert inline math: $ ... $ to \( ... \)
+    text = re.sub(
+        r'(?<!\\)\$(.+?)(?<!\\)\$', 
+        lambda m: '\\(' + m.group(1).strip() + '\\)', 
+        text
+    )
     return text
 
-# Create the build directory if it doesn't exist
+# Create build directory if it doesn't exist
 if not os.path.exists('build'):
     os.makedirs('build')
 
@@ -32,8 +40,11 @@ for filename in os.listdir('posts'):
         # Preprocess math expressions in the markdown content
         post.content = convert_math_expressions(post.content)
         
-        # Convert markdown content to HTML
-        content_html = markdown.markdown(post.content, extensions=['fenced_code', 'codehilite'])
+        # Convert markdown content to HTML with extra and tables extensions
+        content_html = markdown.markdown(
+            post.content, 
+            extensions=['fenced_code', 'codehilite', 'tables', 'extra']
+        )
         
         # Prepare post metadata for the homepage list
         post_info = {

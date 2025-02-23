@@ -3,22 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <title>My Blog Homepage</title>
-    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .post-list { list-style: none; padding: 0; }
-        .post-list li { margin-bottom: 10px; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 60%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .post-list {
+            list-style: none;
+            padding: 0;
+        }
+        .post-list li {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .post-list li a {
+            font-size: 1.2em;
+            text-decoration: none;
+            color: #333;
+        }
+        .post-meta {
+            color: #777;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
-    <h1>My Blog</h1>
-    <ul class="post-list">
-        {% for post in posts %}
-        <li>
-            <a href="{{ post.filename }}">{{ post.title }}</a>
-            <small>by {{ post.author }} on {{ post.date }}</small>
-        </li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <h1>My Blog</h1>
+        <ul class="post-list">
+            {% for post in posts %}
+            <li>
+                <a href="{{ post.filename }}">{{ post.title }}</a>
+                <br>
+                <small class="post-meta">by {{ post.author }} on {{ post.date }}</small>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>
