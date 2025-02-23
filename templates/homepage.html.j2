@@ -65,7 +65,7 @@
         <ul class="post-list">
             {% for post in posts %}
             <li>
-                <a href="{{ post.filename }}">{{ post.title }}</a>
+                <a href="build/{{ post.filename }}">{{ post.title }}</a>
                 <br>
                 <small class="post-meta">by {{ post.author }} on {{ post.date }}</small>
             </li>

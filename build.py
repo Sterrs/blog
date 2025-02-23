@@ -100,7 +100,7 @@ quote = completion.choices[0].message.content.strip()
 build_date = datetime.datetime.now().strftime('%Y-%m-%d')
 # Render the homepage with the list of posts and the witty quote
 rendered_homepage = homepage_template.render(posts=posts_metadata, quote=quote, build_date=build_date)
-with open(os.path.join('build', 'index.html'), 'w', encoding='utf-8') as f:
+with open('index.html', 'w', encoding='utf-8') as f:
     f.write(rendered_homepage)
 
 print("Blog built successfully!")
